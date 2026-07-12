@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useStylesheet } from "../hooks/useStylesheet";
 
 export const AdminDashboard = ({ onViewChange, onLogout }) => {
+  useStylesheet(['/colors_and_type.css', '/root_index.css']);
   const [activeTab, setActiveTab] = useState("tab-dashboard");
   const [searchQuery, setSearchQuery] = useState("");
 

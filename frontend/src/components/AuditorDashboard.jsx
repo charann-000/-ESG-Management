@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useStylesheet } from "../hooks/useStylesheet";
 
 export const AuditorDashboard = ({ onViewChange, onLogout }) => {
+  useStylesheet(['/colors_and_type.css', '/root_index.css']);
   // Score state
   const [scoreState, setScoreState] = useState({ e: 68, s: 76, g: 74 });
   

@@ -1,73 +1,145 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext';
+import useAuth from './hooks/useAuth';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Login from './pages/Login/Login';
 import ChangePassword from './pages/ChangePassword/ChangePassword';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Unauthorized from './pages/Unauthorized/Unauthorized';
+
+import { LandingPage } from './components/LandingPage';
+import { CEODashboard } from './components/CEODashboard';
+import { AuditorDashboard } from './components/AuditorDashboard';
+import { ManagerDashboard } from './components/ManagerDashboard';
+import { AdminDashboard } from './components/AdminDashboard';
+
 import './App.css';
+
+const CEODashboardRoute = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+  return <CEODashboard onViewChange={(view) => navigate(view === 'landing' ? '/' : `/${view === 'admin' ? 'admin/demo-dashboard' : `${view}/dashboard`}`)} onLogout={handleLogout} />;
+};
+
+const AuditorDashboardRoute = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+  return <AuditorDashboard onViewChange={(view) => navigate(view === 'landing' ? '/' : `/${view === 'admin' ? 'admin/demo-dashboard' : `${view}/dashboard`}`)} onLogout={handleLogout} />;
+};
+
+const ManagerDashboardRoute = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+  return <ManagerDashboard onViewChange={(view) => navigate(view === 'landing' ? '/' : `/${view === 'admin' ? 'admin/demo-dashboard' : `${view}/dashboard`}`)} onLogout={handleLogout} />;
+};
+
+const AdminDashboardRoute = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+  return <AdminDashboard onViewChange={(view) => navigate(view === 'landing' ? '/' : `/${view === 'admin' ? 'admin/demo-dashboard' : `${view}/dashboard`}`)} onLogout={handleLogout} />;
+};
+
+function AppContent() {
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+
+      {/* Protected: Change Password */}
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePassword />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Protected: Role-based Live Dashboards */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['Admin']}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Protected: Legacy / Demo Dashboards */}
+      <Route
+        path="/admin/demo-dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['Admin']}>
+            <AdminDashboardRoute />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/ceo/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['CEO']}>
+            <CEODashboardRoute />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/manager/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['Department Manager']}>
+            <ManagerDashboardRoute />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employee/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['Employee']}>
+            <Navigate to="/" replace />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/auditor/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['Auditor']}>
+            <AuditorDashboardRoute />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Unauthorized */}
+      <Route path="/unauthorized" element={<Unauthorized />} />
+
+      {/* Catch-all: Redirect to landing */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-
-          {/* Protected: Change Password */}
-          <Route
-            path="/change-password"
-            element={
-              <ProtectedRoute>
-                <ChangePassword />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Protected: Role-based Dashboards */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['Admin']}>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/manager/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['Department Manager']}>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['Employee']}>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/auditor/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['Auditor']}>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Unauthorized */}
-          <Route path="/unauthorized" element={<Unauthorized />} />
-
-          {/* Catch-all: Redirect to login */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <AppContent />
 
         {/* Global Toast Notifications */}
         <ToastContainer

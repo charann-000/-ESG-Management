@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { getESGScores, getCSRPrograms, createCSRProgram, approveCSREntry, logEmissionTransaction, getManagerDashboard } from "../api/api";
+import { useStylesheet } from "../hooks/useStylesheet";
 
 export const ManagerDashboard = ({ onViewChange, onLogout }) => {
+  useStylesheet(['/colors_and_type.css', '/root_index.css']);
   // Score state — will be fetched from backend
   const [scoreState, setScoreState] = useState({ e: 65, s: 72, g: 78 });
   const [loading, setLoading] = useState(true);

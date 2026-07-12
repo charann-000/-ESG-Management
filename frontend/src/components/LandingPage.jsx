@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 import { ScoreCard } from "./ScoreCard";
 import { loginUser } from "../api/api";
+import { useStylesheet } from "../hooks/useStylesheet";
+import useAuth from "../hooks/useAuth";
 
 export const LandingPage = ({ scoreState, setScoreState, setUserRole, onViewChange }) => {
+  useStylesheet(['/colors_and_type.css', '/root_index.css']);
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginFeedback, setLoginFeedback] = useState("");
@@ -285,42 +292,25 @@ export const LandingPage = ({ scoreState, setScoreState, setUserRole, onViewChan
     }
 
     setLoginFeedback("Verifying credentials...");
-
-    // Try real backend authentication
-    const result = await loginUser(email.trim(), password);
-
-    if (result && result.success) {
-      // Backend login succeeded
-      const user = result.user || {};
-      const backendRole = (user.role || "").toLowerCase();
-      let role = "Admin";
-      let route = "admin";
-
-      if (backendRole === "ceo" || backendRole === "CEO") { role = "CEO"; route = "ceo"; }
-      else if (backendRole === "manager") { role = "Manager"; route = "manager"; }
-      else if (backendRole === "auditor") { role = "Auditor"; route = "auditor"; }
-      else if (backendRole === "employee") { role = "Employee"; route = "roles"; }
-      else if (backendRole === "admin") { role = "Admin"; route = "admin"; }
-      else {
-        // Fallback: derive from email
-        const derived = getRoleRoute(email);
-        role = derived.role;
-        route = derived.route;
-      }
-
-      setUserRole(role);
-      setLoginFeedback(`Welcome back, ${user.name || role}! Redirecting...`);
-
+    try {
+      // Try real backend authentication
+      const user = await login(email.trim(), password);
+      setLoginFeedback(`Welcome back, ${user.name || 'User'}! Redirecting...`);
       setTimeout(() => {
-        if (route === "roles") {
-          setActiveRoleTab("Employee");
-          const el = document.getElementById("roles");
-          if (el) el.scrollIntoView({ behavior: "smooth" });
+        if (user.role === 'Admin') {
+          navigate('/admin/dashboard');
+        } else if (user.role === 'Department Manager') {
+          navigate('/manager/dashboard');
+        } else if (user.role === 'Auditor') {
+          navigate('/auditor/dashboard');
+        } else if (user.role === 'CEO') {
+          navigate('/ceo/dashboard');
         } else {
-          onViewChange(route);
+          navigate('/employee/dashboard');
         }
-      }, 400);
-    } else {
+      }, 500);
+    } catch (err) {
+      console.warn("Backend login failed, using demo fallback:", err.message);
       // Backend auth failed — use demo fallback routing
       const { role, route } = getRoleRoute(email);
 
@@ -333,7 +323,12 @@ export const LandingPage = ({ scoreState, setScoreState, setUserRole, onViewChan
           const el = document.getElementById("roles");
           if (el) el.scrollIntoView({ behavior: "smooth" });
         } else {
-          onViewChange(route);
+          // If in React Router, navigate to respective path
+          if (role === 'Admin') navigate('/admin/dashboard');
+          else if (role === 'Manager') navigate('/manager/dashboard');
+          else if (role === 'Auditor') navigate('/auditor/dashboard');
+          else if (role === 'CEO') navigate('/ceo/dashboard');
+          else navigate('/employee/dashboard');
         }
       }, 600);
     }
