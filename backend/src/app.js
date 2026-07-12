@@ -65,7 +65,14 @@ app.get("/health", (req, res) => {
 
 // --- Phase 2 routes registration ---
 const authRouter = require("./routes/authRoutes");
+const departmentRouter = require("./routes/departmentRoutes");
+const userManagementRouter = require("./routes/userManagementRoutes");
+const emissionFactorRouter = require("./routes/emissionFactorRoutes");
+
 app.use("/api/auth", authRouter);
+app.use("/api/departments", departmentRouter);
+app.use("/api/users", userManagementRouter);
+app.use("/api/emission-factors", emissionFactorRouter);
 
 // 9. 404 Route Handler for undefined endpoints
 app.use((req, res, next) => {
@@ -76,13 +83,25 @@ app.use((req, res, next) => {
 
 // 10. Centralized Global Error Handling Middleware
 app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const status = `${statusCode}`.startsWith("4") ? "fail" : "error";
+  const statusCode = err.statusCode || (err.name === "ValidationError" ? 400 : 500);
   
+  // Format Mongoose ValidationErrors or other sub-errors if present
+  let formattedErrors = [];
+  if (err.errors) {
+    if (Array.isArray(err.errors)) {
+      formattedErrors = err.errors;
+    } else {
+      formattedErrors = Object.keys(err.errors).map((key) => ({
+        field: key,
+        message: err.errors[key].message,
+      }));
+    }
+  }
+
   res.status(statusCode).json({
-    status,
+    success: false,
     message: err.message || "Internal server error occurred",
-    // Only expose stack trace details in development environment
+    errors: formattedErrors,
     ...(env.nodeEnv === "development" && { stack: err.stack })
   });
 });
