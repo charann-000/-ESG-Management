@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const env = require("./config/env");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const app = express();
 
@@ -61,6 +63,13 @@ app.get("/health", (req, res) => {
     timestamp: new Date(),
     environment: env.nodeEnv
   });
+});
+
+// Serve Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
 });
 
 // --- Phase 2 routes registration ---

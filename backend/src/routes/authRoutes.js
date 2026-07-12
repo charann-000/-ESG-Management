@@ -11,6 +11,42 @@ const {
 // --- Public Endpoints ---
 
 // POST /auth/login - User authentication
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User login and session management
+ */
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Log in to the application
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully logged in
+ *       400:
+ *         description: Validation Error
+ *       401:
+ *         description: Invalid credentials
+ */
 router.post(
   "/login",
   authValidation.loginValidation,
