@@ -27,7 +27,7 @@ const verifyMailTransport = async () => {
     await transporter.verify();
     console.log("✅ Mail transport verified successfully (Gmail OAuth2).");
   } catch (error) {
-    console.error("❌ Mail transport verification failed:", error.message);
+    console.error("❌ Mail transport verification failed:", error);
     throw error; // Propagated to stop the startup sequence if desired
   }
 };
