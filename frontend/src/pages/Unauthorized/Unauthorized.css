@@ -1,0 +1,49 @@
+.unauthorized-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #020617 0%, #0a0f1c 30%, #0d1b2a 60%, #071320 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.unauthorized-card {
+  text-align: center;
+  max-width: 400px;
+  padding: 48px 36px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: card-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes card-enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.unauthorized-card__icon {
+  margin-bottom: 20px;
+  color: #f87171;
+}
+
+.unauthorized-card__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f87171;
+  margin: 0 0 12px 0;
+}
+
+.unauthorized-card__text {
+  font-size: 0.88rem;
+  color: rgba(203, 213, 225, 0.6);
+  line-height: 1.6;
+  margin: 0 0 28px 0;
+}
