@@ -1,0 +1,168 @@
+/* EcoSphere ESG Premium — reusable color, type, spacing, radius, motion tokens
+   Source: ESG Premium Web Page (index.html) + EcoSphere hackathon plan
+   Load this stylesheet before product UI. Prefer semantic aliases over hard-coded hex. */
+
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap");
+
+:root {
+  /* —— Brand slug tokens —— */
+  --esg-premium-web-page-bg: #e8f5ee;
+  --esg-premium-web-page-bg-deep: #07140f;
+  --esg-premium-web-page-bg-mid: #0d241a;
+  --esg-premium-web-page-surface: #f4fbf7;
+  --esg-premium-web-page-surface-solid: color-mix(in oklab, #ffffff 90%, #e8f5ee);
+  --esg-premium-web-page-fg: #0c1a14;
+  --esg-premium-web-page-fg-2: #2a4036;
+  --esg-premium-web-page-muted: #5c7368;
+  --esg-premium-web-page-meta: #14965c;
+  --esg-premium-web-page-border: rgba(12, 26, 20, 0.08);
+  --esg-premium-web-page-border-glass: rgba(255, 255, 255, 0.48);
+  --esg-premium-web-page-accent: #14965c;
+  --esg-premium-web-page-accent-on: #ffffff;
+  --esg-premium-web-page-accent-deep: #0d7a48;
+  --esg-premium-web-page-success: #22c55e;
+  --esg-premium-web-page-warn: #f59e0b;
+  --esg-premium-web-page-danger: #ef4444;
+  --esg-premium-web-page-info: #0ea5e9;
+
+  --esg-premium-web-page-font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --esg-premium-web-page-font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --esg-premium-web-page-font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --esg-premium-web-page-text-xs: 12px;
+  --esg-premium-web-page-text-sm: 14px;
+  --esg-premium-web-page-text-base: 16px;
+  --esg-premium-web-page-text-lg: 18px;
+  --esg-premium-web-page-leading-body: 1.55;
+  --esg-premium-web-page-leading-tight: 1.02;
+  --esg-premium-web-page-tracking-display: -0.03em;
+
+  --esg-premium-web-page-space-2: 8px;
+  --esg-premium-web-page-space-3: 12px;
+  --esg-premium-web-page-space-4: 16px;
+  --esg-premium-web-page-space-5: 20px;
+  --esg-premium-web-page-space-6: 24px;
+  --esg-premium-web-page-space-8: 32px;
+  --esg-premium-web-page-space-12: 48px;
+  --esg-premium-web-page-section-y: clamp(72px, 10vw, 128px);
+
+  --esg-premium-web-page-radius: 20px;
+  --esg-premium-web-page-radius-sm: 12px;
+  --esg-premium-web-page-radius-pill: 9999px;
+
+  --esg-premium-web-page-elev-glass:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 20px 56px rgba(7, 20, 15, 0.1);
+  --esg-premium-web-page-elev-card: 0 10px 28px rgba(7, 20, 15, 0.04);
+  --esg-premium-web-page-focus-ring: 0 0 0 4px rgba(20, 150, 92, 0.28);
+
+  --esg-premium-web-page-motion-fast: 180ms;
+  --esg-premium-web-page-motion-base: 280ms;
+  --esg-premium-web-page-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --esg-premium-web-page-container-max: 1180px;
+  --esg-premium-web-page-gutter: clamp(20px, 4vw, 40px);
+
+  /* —— Semantic aliases (preferred in product CSS) —— */
+  --bg: var(--esg-premium-web-page-bg);
+  --bg-deep: var(--esg-premium-web-page-bg-deep);
+  --bg-mid: var(--esg-premium-web-page-bg-mid);
+  --surface: var(--esg-premium-web-page-surface);
+  --surface-solid: var(--esg-premium-web-page-surface-solid);
+  --fg: var(--esg-premium-web-page-fg);
+  --fg-2: var(--esg-premium-web-page-fg-2);
+  --muted: var(--esg-premium-web-page-muted);
+  --meta: var(--esg-premium-web-page-meta);
+  --border: var(--esg-premium-web-page-border);
+  --border-glass: var(--esg-premium-web-page-border-glass);
+  --accent: var(--esg-premium-web-page-accent);
+  --accent-on: var(--esg-premium-web-page-accent-on);
+  --accent-deep: var(--esg-premium-web-page-accent-deep);
+  --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+  --success: var(--esg-premium-web-page-success);
+  --warn: var(--esg-premium-web-page-warn);
+  --danger: var(--esg-premium-web-page-danger);
+  --info: var(--esg-premium-web-page-info);
+
+  --font-display: var(--esg-premium-web-page-font-display);
+  --font-body: var(--esg-premium-web-page-font-body);
+  --font-mono: var(--esg-premium-web-page-font-mono);
+  --font-family: var(--font-body);
+  --code-font-family: var(--font-mono);
+
+  --text-xs: var(--esg-premium-web-page-text-xs);
+  --text-sm: var(--esg-premium-web-page-text-sm);
+  --text-base: var(--esg-premium-web-page-text-base);
+  --text-lg: var(--esg-premium-web-page-text-lg);
+  --leading-body: var(--esg-premium-web-page-leading-body);
+  --leading-tight: var(--esg-premium-web-page-leading-tight);
+  --tracking-display: var(--esg-premium-web-page-tracking-display);
+
+  --space-2: var(--esg-premium-web-page-space-2);
+  --space-3: var(--esg-premium-web-page-space-3);
+  --space-4: var(--esg-premium-web-page-space-4);
+  --space-5: var(--esg-premium-web-page-space-5);
+  --space-6: var(--esg-premium-web-page-space-6);
+  --space-8: var(--esg-premium-web-page-space-8);
+  --space-12: var(--esg-premium-web-page-space-12);
+  --section-y: var(--esg-premium-web-page-section-y);
+
+  --radius: var(--esg-premium-web-page-radius);
+  --radius-sm: var(--esg-premium-web-page-radius-sm);
+  --radius-pill: var(--esg-premium-web-page-radius-pill);
+  --radius-control: var(--radius-sm);
+  --radius-card: var(--radius);
+
+  --elev-glass: var(--esg-premium-web-page-elev-glass);
+  --elev-card: var(--esg-premium-web-page-elev-card);
+  --focus-ring: var(--esg-premium-web-page-focus-ring);
+
+  --motion-fast: var(--esg-premium-web-page-motion-fast);
+  --motion-base: var(--esg-premium-web-page-motion-base);
+  --ease: var(--esg-premium-web-page-ease);
+
+  --container-max: var(--esg-premium-web-page-container-max);
+  --gutter: var(--esg-premium-web-page-gutter);
+
+  /* Open Design generic aliases */
+  --color-background: var(--bg);
+  --color-surface: var(--surface-solid);
+  --color-background-soft: var(--surface);
+  --color-text: var(--fg);
+  --color-text-1: var(--fg);
+  --color-text-secondary: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--accent);
+  --color-primary-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+/* Atmosphere wash used on marketing / pitch surfaces */
+.esg-atmosphere {
+  background:
+    radial-gradient(ellipse 90% 70% at 78% 35%, rgba(20, 150, 92, 0.14), transparent 52%),
+    radial-gradient(ellipse 60% 50% at 12% 80%, rgba(100, 180, 140, 0.1), transparent 50%),
+    linear-gradient(180deg, #dcefe6 0%, var(--bg) 28%, #f3faf6 70%, #e6f3ec 100%);
+}
+
+/* Glass surface recipe */
+.esg-glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--elev-glass);
+}
+
+/* Solid product card recipe */
+.esg-card {
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--elev-card);
+}
+
+.od-design-system-preview {
+  color: var(--fg);
+  background: var(--bg);
+  font-family: var(--font-body);
+}

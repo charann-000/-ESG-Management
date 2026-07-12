@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="EcoSphere brand mark">
+  <defs>
+    <linearGradient id="esg-mark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14965c"/>
+      <stop offset="100%" stop-color="#0d7a48"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="36" fill="url(#esg-mark)"/>
+  <g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M64 28c-14 18-25 32-25 46a25 25 0 0 0 50 0c0-14-11-28-25-46Z"/>
+    <path d="M64 74v28"/>
+  </g>
+</svg>
