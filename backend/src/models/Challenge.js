@@ -7,7 +7,7 @@ const challengeParticipantSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Employee reference is required"],
     },
-    proofUrl: {
+    proof: {
       type: String,
       default: null,
       trim: true,
@@ -30,9 +30,18 @@ const challengeParticipantSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    completedAt: {
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    approvedAt: {
       type: Date,
       default: null,
+    },
+    remarks: {
+      type: String,
+      default: "",
     },
   },
   { _id: false }
@@ -81,7 +90,25 @@ const challengeSchema = new mongoose.Schema(
     department: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Department",
-      default: null, // Null indicates a company-wide challenge
+      default: null,
+      validate: {
+        validator: function (value) {
+          if (this.scope === "department") {
+            return value !== null && value !== undefined;
+          }
+          return true;
+        },
+        message: "Department reference is required when challenge scope is 'department'",
+      },
+    },
+    scope: {
+      type: String,
+      required: [true, "Challenge scope is required"],
+      enum: {
+        values: ["department", "company"],
+        message: "{VALUE} is not a valid scope",
+      },
+      default: "company",
     },
     status: {
       type: String,

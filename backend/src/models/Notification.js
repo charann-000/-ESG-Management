@@ -66,11 +66,10 @@ notificationSchema.index({ recipient: 1, isRead: 1, createdAt: -1 });
 notificationSchema.index({ event: 1 });
 
 // Pre-save hook to populate readAt automatically on status toggle
-notificationSchema.pre("save", function (next) {
+notificationSchema.pre("save", function () {
   if (this.isModified("isRead") && this.isRead && !this.readAt) {
     this.readAt = new Date();
   }
-  next();
 });
 
 const Notification = mongoose.model("Notification", notificationSchema);

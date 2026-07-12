@@ -7,7 +7,7 @@ const participantSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Employee reference is required"],
     },
-    proofUrl: {
+    proof: {
       type: String,
       required: [true, "Proof file URL is required"],
       trim: true,
@@ -26,9 +26,18 @@ const participantSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
     approvedAt: {
       type: Date,
       default: null,
+    },
+    remarks: {
+      type: String,
+      default: "",
     },
   },
   { _id: false }
