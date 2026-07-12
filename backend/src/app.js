@@ -63,9 +63,9 @@ app.get("/health", (req, res) => {
   });
 });
 
-// --- Phase 2 placeholders for actual routes ---
-// app.use("/api/v1/auth", authRouter);
-// app.use("/api/v1/users", userRouter);
+// --- Phase 2 routes registration ---
+const authRouter = require("./routes/authRoutes");
+app.use("/api/auth", authRouter);
 
 // 9. 404 Route Handler for undefined endpoints
 app.use((req, res, next) => {

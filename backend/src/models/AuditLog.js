@@ -78,16 +78,15 @@ auditLogSchema.index({ action: 1 });
 auditLogSchema.index({ createdAt: 1 });
 
 // Prevent updates and deletes on Audit Logs to ensure immutability
-auditLogSchema.pre("save", function (next) {
+auditLogSchema.pre("save", function () {
   if (!this.isNew) {
-    return next(new Error("Audit logs are immutable and cannot be updated."));
+    throw new Error("Audit logs are immutable and cannot be updated.");
   }
-  next();
 });
 
 // Block updates, deletes, and removes
-const preventModification = function (next) {
-  next(new Error("Audit logs are immutable and cannot be modified or deleted."));
+const preventModification = function () {
+  throw new Error("Audit logs are immutable and cannot be modified or deleted.");
 };
 
 auditLogSchema.pre("updateOne", preventModification);
