@@ -12,7 +12,10 @@ const transporter = nodemailer.createTransport({
     clientId: env.email.clientId,
     clientSecret: env.email.clientSecret,
     refreshToken: env.email.refreshToken
-  }
+  },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000
 });
 
 /**

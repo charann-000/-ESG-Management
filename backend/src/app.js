@@ -55,12 +55,28 @@ const globalLimiter = rateLimit({
 // Apply rate limiter to all API endpoints
 app.use("/api", globalLimiter);
 
-// 8. Health check endpoint (verifies server and basic settings)
-app.get("/health", (req, res) => {
+// 8. Root Endpoint (API Info)
+app.get("/", (req, res) => {
   res.status(200).json({
-    status: "success",
-    message: "Server is healthy and connected to MongoDB",
-    timestamp: new Date(),
+    success: true,
+    application: "EcoSphere ESG Platform API",
+    version: "1.0.0",
+    status: "Running",
+    documentation: "/api-docs",
+    health: "/health",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// 9. Health check endpoint (verifies server and basic settings)
+app.get("/health", (req, res) => {
+  const mongoose = require("mongoose");
+  res.status(200).json({
+    success: true,
+    status: "healthy",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
     environment: env.nodeEnv
   });
 });

@@ -51,7 +51,6 @@ const policySchema = new mongoose.Schema(
 );
 
 // Indexes
-policySchema.index({ title: 1 });
 policySchema.index({ status: 1 });
 
 const Policy = mongoose.model("Policy", policySchema);

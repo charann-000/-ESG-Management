@@ -153,8 +153,6 @@ const userSchema = new mongoose.Schema(
 );
 
 // Indexes
-// Unique index for lookup
-userSchema.index({ email: 1 });
 // Indexes for departmental filtering
 userSchema.index({ department: 1 });
 userSchema.index({ role: 1 });

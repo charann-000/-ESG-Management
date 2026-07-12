@@ -97,8 +97,6 @@ const departmentSchema = new mongoose.Schema(
 );
 
 // Indexes
-departmentSchema.index({ code: 1 });
-departmentSchema.index({ manager: 1 });
 departmentSchema.index({ status: 1 });
 // Index for sorting departments by overall ESG compliance score
 departmentSchema.index({ overallEsgScore: -1 });

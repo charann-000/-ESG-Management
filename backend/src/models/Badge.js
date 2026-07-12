@@ -68,7 +68,6 @@ const badgeSchema = new mongoose.Schema(
 );
 
 // Indexes
-badgeSchema.index({ name: 1 });
 badgeSchema.index({ status: 1 });
 
 const Badge = mongoose.model("Badge", badgeSchema);

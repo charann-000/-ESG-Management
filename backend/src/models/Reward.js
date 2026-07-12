@@ -68,7 +68,6 @@ const rewardSchema = new mongoose.Schema(
 );
 
 // Indexes
-rewardSchema.index({ title: 1 });
 rewardSchema.index({ status: 1, stock: 1 });
 
 const Reward = mongoose.model("Reward", rewardSchema);

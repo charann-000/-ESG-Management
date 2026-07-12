@@ -65,7 +65,6 @@ const emissionFactorSchema = new mongoose.Schema(
 
 // Indexes
 emissionFactorSchema.index({ activityType: 1, status: 1 });
-emissionFactorSchema.index({ name: 1 });
 emissionFactorSchema.index({ year: -1 });
 
 const EmissionFactor = mongoose.model("EmissionFactor", emissionFactorSchema);
