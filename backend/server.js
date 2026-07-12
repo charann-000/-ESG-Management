@@ -3,6 +3,10 @@
  * Orchestrates application bootstrap: config validation, db connection, external services check, and server start.
  */
 
+// Set IPv4 preference for DNS resolution (solves IPv6 ENETUNREACH on deployment environments like Render)
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
+
 // Step 1: Load environment variables and validate env schema
 const env = require("./src/config/env");
 
