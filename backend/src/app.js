@@ -68,11 +68,15 @@ const authRouter = require("./routes/authRoutes");
 const departmentRouter = require("./routes/departmentRoutes");
 const userManagementRouter = require("./routes/userManagementRoutes");
 const emissionFactorRouter = require("./routes/emissionFactorRoutes");
+const operationRouter = require("./routes/operationRoutes");
+const dashboardRouter = require("./routes/dashboardRoutes");
 
 app.use("/api/auth", authRouter);
 app.use("/api/departments", departmentRouter);
 app.use("/api/users", userManagementRouter);
 app.use("/api/emission-factors", emissionFactorRouter);
+app.use("/api/operations", operationRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 // 9. 404 Route Handler for undefined endpoints
 app.use((req, res, next) => {

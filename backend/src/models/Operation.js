@@ -67,6 +67,15 @@ const operationSchema = new mongoose.Schema(
         message: "Operation date cannot be in the future",
       },
     },
+    status: {
+      type: String,
+      required: true,
+      enum: {
+        values: ["Active", "Inactive"],
+        message: "{VALUE} is not a valid status",
+      },
+      default: "Active",
+    },
   },
   {
     timestamps: true,
@@ -79,29 +88,22 @@ operationSchema.index({ emissionFactor: 1 });
 operationSchema.index({ carbonEmission: 1 });
 
 // Pre-save hook to calculate carbon emissions dynamically
-operationSchema.pre("save", async function (next) {
-  try {
-    const EmissionFactor = mongoose.model("EmissionFactor");
-    const factorDoc = await EmissionFactor.findById(this.emissionFactor);
+operationSchema.pre("save", async function () {
+  const EmissionFactor = mongoose.model("EmissionFactor");
+  const factorDoc = await EmissionFactor.findById(this.emissionFactor);
 
-    if (!factorDoc) {
-      return next(new Error("Selected Emission Factor does not exist"));
-    }
-
-    if (factorDoc.unit.toLowerCase() !== this.unit.toLowerCase()) {
-      return next(
-        new Error(
-          `Unit mismatch: Operation unit is '${this.unit}' but Emission Factor expects '${factorDoc.unit}'`
-        )
-      );
-    }
-
-    // Multiply quantity by emission factor to compute CO2 equivalent (in kg CO2e)
-    this.carbonEmission = this.quantity * factorDoc.factor;
-    next();
-  } catch (err) {
-    next(err);
+  if (!factorDoc) {
+    throw new Error("Selected Emission Factor does not exist");
   }
+
+  if (factorDoc.unit.toLowerCase() !== this.unit.toLowerCase()) {
+    throw new Error(
+      `Unit mismatch: Operation unit is '${this.unit}' but Emission Factor expects '${factorDoc.unit}'`
+    );
+  }
+
+  // Multiply quantity by emission factor to compute CO2 equivalent (in kg CO2e)
+  this.carbonEmission = this.quantity * factorDoc.factor;
 });
 
 const Operation = mongoose.model("Operation", operationSchema);
