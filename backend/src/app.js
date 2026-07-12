@@ -75,6 +75,7 @@ const policyRouter = require("./routes/policyRoutes");
 const auditRouter = require("./routes/auditRoutes");
 const complianceRouter = require("./routes/complianceRoutes");
 const reportRouter = require("./routes/reportRoutes");
+const analyticsRouter = require("./routes/analyticsRoutes");
 
 app.use("/api/auth", authRouter);
 app.use("/api/departments", departmentRouter);
@@ -87,6 +88,7 @@ app.use("/api/policies", policyRouter);
 app.use("/api/audits", auditRouter);
 app.use("/api/compliance-issues", complianceRouter);
 app.use("/api/reports", reportRouter);
+app.use("/api/analytics", analyticsRouter);
 
 // 9. 404 Route Handler for undefined endpoints
 app.use((req, res, next) => {
