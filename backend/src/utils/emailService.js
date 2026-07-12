@@ -81,8 +81,30 @@ const sendPasswordChangedEmail = async (email, name) => {
   return transporter.sendMail(mailOptions);
 };
 
+/**
+ * Sends a governance event notification email.
+ */
+const sendGovernanceEmail = async (email, subject, title, bodyContent) => {
+  const mailOptions = {
+    from: env.email.from,
+    to: email,
+    subject: `EcoSphere ESG Governance - ${subject}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+        <h2 style="color: #607d8b; text-align: center;">${title}</h2>
+        <p>${bodyContent}</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="font-size: 0.8em; color: #888; text-align: center;">This is an automated message. Please do not reply directly to this email.</p>
+      </div>
+    `,
+  };
+
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendForgotPasswordEmail,
   sendPasswordChangedEmail,
+  sendGovernanceEmail,
 };

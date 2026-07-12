@@ -99,48 +99,38 @@ complianceIssueSchema.index({ audit: 1 });
 complianceIssueSchema.index({ status: 1 });
 
 // Pre-save validations to enforce workflow logic
-complianceIssueSchema.pre("save", async function (next) {
+complianceIssueSchema.pre("save", async function () {
   const User = mongoose.model("User");
 
-  try {
-    // 1. Resolve State Validations
-    if (this.status === "Resolved") {
-      if (!this.resolvedBy || !this.resolutionDetails.trim()) {
-        return next(
-          new Error("Resolution details and resolver reference are required to mark issue as Resolved")
-        );
-      }
-      const resolver = await User.findById(this.resolvedBy);
-      if (!resolver || resolver.role !== "Department Manager") {
-        return next(new Error("Assigned resolver must be a Department Manager"));
-      }
-      if (!this.resolvedAt) {
-        this.resolvedAt = new Date();
-      }
+  // 1. Resolve State Validations
+  if (this.status === "Resolved") {
+    if (!this.resolvedBy || !this.resolutionDetails.trim()) {
+      throw new Error("Resolution details and resolver reference are required to mark issue as Resolved");
     }
-
-    // 2. Verified State Validations
-    if (this.status === "Verified") {
-      if (!this.resolvedBy || !this.resolvedAt) {
-        return next(new Error("An issue must be resolved before it can be verified"));
-      }
-      if (!this.verifiedBy || !this.verificationDetails.trim()) {
-        return next(
-          new Error("Verification details and auditor reference are required to mark issue as Verified")
-        );
-      }
-      const verifier = await User.findById(this.verifiedBy);
-      if (!verifier || verifier.role !== "Auditor") {
-        return next(new Error("Assigned verifier must be an Auditor"));
-      }
-      if (!this.verifiedAt) {
-        this.verifiedAt = new Date();
-      }
+    const resolver = await User.findById(this.resolvedBy);
+    if (!resolver || resolver.role !== "Department Manager") {
+      throw new Error("Assigned resolver must be a Department Manager");
     }
+    if (!this.resolvedAt) {
+      this.resolvedAt = new Date();
+    }
+  }
 
-    next();
-  } catch (err) {
-    next(err);
+  // 2. Verified State Validations
+  if (this.status === "Verified") {
+    if (!this.resolvedBy || !this.resolvedAt) {
+      throw new Error("An issue must be resolved before it can be verified");
+    }
+    if (!this.verifiedBy || !this.verificationDetails.trim()) {
+      throw new Error("Verification details and auditor reference are required to mark issue as Verified");
+    }
+    const verifier = await User.findById(this.verifiedBy);
+    if (!verifier || verifier.role !== "Auditor") {
+      throw new Error("Assigned verifier must be an Auditor");
+    }
+    if (!this.verifiedAt) {
+      this.verifiedAt = new Date();
+    }
   }
 });
 
