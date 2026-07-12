@@ -56,6 +56,35 @@ const departmentSchema = new mongoose.Schema(
       },
       default: "Active",
     },
+    // Cached scores for dashboard speed
+    environmentalScore: {
+      type: Number,
+      required: true,
+      min: [0, "Environmental Score cannot be negative"],
+      max: [100, "Environmental Score cannot exceed 100"],
+      default: 0,
+    },
+    socialScore: {
+      type: Number,
+      required: true,
+      min: [0, "Social Score cannot be negative"],
+      max: [100, "Social Score cannot exceed 100"],
+      default: 0,
+    },
+    governanceScore: {
+      type: Number,
+      required: true,
+      min: [0, "Governance Score cannot be negative"],
+      max: [100, "Governance Score cannot exceed 100"],
+      default: 0,
+    },
+    overallEsgScore: {
+      type: Number,
+      required: true,
+      min: [0, "Overall ESG Score cannot be negative"],
+      max: [100, "Overall ESG Score cannot exceed 100"],
+      default: 0,
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -71,6 +100,8 @@ const departmentSchema = new mongoose.Schema(
 departmentSchema.index({ code: 1 });
 departmentSchema.index({ manager: 1 });
 departmentSchema.index({ status: 1 });
+// Index for sorting departments by overall ESG compliance score
+departmentSchema.index({ overallEsgScore: -1 });
 
 const Department = mongoose.model("Department", departmentSchema);
 

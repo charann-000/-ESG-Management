@@ -7,16 +7,16 @@ const auditLogSchema = new mongoose.Schema(
       required: [true, "Action type is required"],
       enum: {
         values: [
-          "USER_LOGIN",
-          "USER_CREATE",
-          "USER_STATUS_CHANGE",
-          "METRIC_CREATE",
-          "METRIC_UPDATE",
-          "DATA_SUBMISSION",
-          "DATA_APPROVAL",
-          "DATA_REJECTION",
-          "DATA_AUDIT",
-          "DATA_DELETE",
+          "CREATE",
+          "UPDATE",
+          "DELETE",
+          "APPROVE",
+          "REJECT",
+          "LOGIN",
+          "PASSWORD_CHANGE",
+          "ROLE_CHANGE",
+          "ACCEPT",
+          "JOIN",
         ],
         message: "{VALUE} is not a valid action",
       },
@@ -33,7 +33,20 @@ const auditLogSchema = new mongoose.Schema(
     targetModel: {
       type: String,
       required: [true, "Target model type is required"],
-      enum: ["User", "Department", "ESGMetric", "DataEntry"],
+      enum: [
+        "User",
+        "Department",
+        "EmissionFactor",
+        "Operation",
+        "Policy",
+        "CSRActivity",
+        "Challenge",
+        "Reward",
+        "Badge",
+        "Audit",
+        "ComplianceIssue",
+        "Notification",
+      ],
     },
     targetId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -54,7 +67,7 @@ const auditLogSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: { createdAt: true, updatedAt: false }, // Audit logs are write-only, no update timestamps needed
+    timestamps: { createdAt: true, updatedAt: false }, // Audit logs are write-once
   }
 );
 

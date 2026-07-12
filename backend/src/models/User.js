@@ -1,6 +1,60 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const userPolicyAcceptanceSchema = new mongoose.Schema(
+  {
+    policy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Policy",
+      required: [true, "Policy reference is required"],
+    },
+    acceptedAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
+const userBadgeEarnedSchema = new mongoose.Schema(
+  {
+    badge: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Badge",
+      required: [true, "Badge reference is required"],
+    },
+    earnedAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+);
+
+const userRedemptionSchema = new mongoose.Schema(
+  {
+    reward: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Reward",
+      required: [true, "Reward reference is required"],
+    },
+    redeemedAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, "Quantity must be at least 1"],
+      default: 1,
+    },
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -67,6 +121,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    xp: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: [0, "XP cannot be negative"],
+    },
+    coins: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: [0, "Coins cannot be negative"],
+    },
+    badges: [userBadgeEarnedSchema],
+    redemptions: [userRedemptionSchema],
+    acceptedPolicies: [userPolicyAcceptanceSchema],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -78,10 +147,19 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for optimal query performance
+// Indexes
+// Unique index for lookup
 userSchema.index({ email: 1 });
+// Indexes for departmental filtering
 userSchema.index({ department: 1 });
 userSchema.index({ role: 1 });
+// Indexes for global and departmental leaderboards
+userSchema.index({ xp: -1 });
+userSchema.index({ department: 1, xp: -1 });
+// Indexes to quickly scan acceptances, badges, and redemptions
+userSchema.index({ "acceptedPolicies.policy": 1 });
+userSchema.index({ "badges.badge": 1 });
+userSchema.index({ "redemptions.reward": 1 });
 
 // Pre-save hook to hash passwords
 userSchema.pre("save", async function (next) {
